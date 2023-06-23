@@ -89,5 +89,132 @@ void MainWindow::OnDraw(Context *cr)
 		cr->Text(" Moving ", "Cantarel", 17, Point(900, 625), 0x01);
 	else if (g_mode == 1)
 		cr->Text(" Printing ", "Cantarel", 17, Point(900, 625), 0x01);
-	else
-		cr->Text(" Erasing ", "Cant.
+		else
+		cr->Text(" Erasing ", "Cantarel", 17, Point(900, 625), 0x01);
+
+	// Рисуем прямые
+	if (g_mode == 0 || g_mode == 1) {
+		for (size_t i = 0; i < g_vector.size() - 1; i += 2) {
+			cr->SetLineWidth(1);
+			cr->SetColor(RGB(g_color_v[i], g_color_v[i + 1], g_color_v[i + 2]));
+			drawLine(cr, g_vector[i], g_vector[i + 1]);
+		}
+	}
+
+	// Рисуем прямоугольники
+	if (g_mode == 0 || g_mode == 2) {
+		cr->SetLineWidth(1);
+		cr->SetColor(RGB(0, 0, 0));
+		for (size_t i = 0; i < g_vector.size() - 1; i += 2) {
+			Point topLeft = g_vector[i];
+			Point bottomRight = g_vector[i + 1];
+			drawRectangle(cr, topLeft, bottomRight);
+		}
+	}
+}
+
+bool MainWindow::OnMouseMove(const Point &position)
+{
+	g_coords = position;
+	NotifyChildren(EVENT_UP, g_coords);
+	NotifyChildren(EVENT_DOWN, g_coords);
+	NotifyChildren(EVENT_LEFT, g_coords);
+	NotifyChildren(EVENT_RIGHT, g_coords);
+
+	return true;
+}
+
+bool MainWindow::OnLeftMouseButtonClick(const Point &position)
+{
+	g_coords = position;
+	NotifyChildren(EVENT_SET, g_coords);
+	return true;
+}
+
+bool MainWindow::OnRightMouseButtonClick(const Point &position)
+{
+	g_coords = position;
+	NotifyChildren(EVENT_UNSET, g_coords);
+	return true;
+}
+
+void MainWindow::OnNotify(Window *child, uint32_t type, const Point &position)
+{
+	if (type == EVENT_CLOSE)
+		Close();
+	else if (type == EVENT_RED)
+		m_color = RGB(1, 0, 0);
+	else if (type == EVENT_GREEN)
+		m_color = RGB(0, 1, 0);
+	else if (type == EVENT_BLUE)
+		m_color = RGB(0, 0, 1);
+	else if (type == EVENT_BLACK)
+		m_color = RGB(0, 0, 0);
+	else if (type == EVENT_CHMODE) {
+		g_mode++;
+		if (g_mode > 2)
+			g_mode = 0;
+	}
+	else if (type == EVENT_UP)
+	{
+		if (g_help == 1)
+			ShowHelp(0);
+		g_help = 0;
+		g_psize.SetY(g_psize.GetY() + 1);
+	}
+	else if (type == EVENT_DOWN)
+	{
+		if (g_help == 1)
+			ShowHelp(0);
+		g_help = 0;
+		g_psize.SetY(g_psize.GetY() - 1);
+		if (g_psize.GetY() < 1)
+			g_psize.SetY(1);
+	}
+	else if (type == EVENT_LEFT)
+	{
+		if (g_help == 1)
+			ShowHelp(0);
+		g_help = 0;
+		g_psize.SetX(g_psize.GetX() - 1);
+		if (g_psize.GetX() < 1)
+			g_psize.SetX(1);
+	}
+	else if (type == EVENT_RIGHT)
+	{
+		if (g_help == 1)
+			ShowHelp(0);
+		g_help = 0;
+		g_psize.SetX(g_psize.GetX() + 1);
+	}
+	else if (type == EVENT_SET)
+	{
+		if (g_help == 1)
+			ShowHelp(0);
+		g_help = 0;
+		if (g_vector.size() % 2 == 0)
+		{
+			g_vector.push_back(position);
+			g_color_v.push_back(m_color.GetR());
+			g_color_v.push_back(m_color.GetG());
+			g_color_v.push_back(m_color.GetB());
+		}
+		else
+		{
+			g_vector[g_vector.size() - 1] = position;
+		}
+	}
+	else if (type == EVENT_UNSET)
+	{
+		if (g_help == 1)
+			ShowHelp(0);
+		g_help = 0;
+		size_t closestIndex = FindClosestPointIndex(g_vector, position);
+		if (closestIndex != -1)
+		{
+			g_vector.erase(g_vector.begin() + closestIndex, g_vector.begin() + closestIndex + 2);
+			g_color_v.erase(g_color_v.begin() + closestIndex * 3, g_color_v.begin() + closestIndex * 3 + 3);
+		}
+	}
+}
+
