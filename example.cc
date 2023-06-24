@@ -6,7 +6,6 @@
 #include "window.h"
 #include "button.h"
 #include "GUI.h"
-#include "cairo.h"
 
 enum UserEventType
 {
@@ -35,6 +34,7 @@ char				g_text[11];
 Point				g_coords(0,0);
 Point				g_psize(15,15);
 int					g_help = 0;
+cairo_t*            cr;
 
 // родительское окно
 class MainWindow : public Window
@@ -67,7 +67,8 @@ void MainWindow::OnDraw(Context *cr)
 
 	cr->SetColor(RGB(1,1,1));
 	cr->FillRectangle(Point(0,0), Point(1000, 600));
-
+	
+	cr = cairo_create(surface);
 	cr->SetColor(RGB(0, 0, 0));  // Цвет прямой (черный)
 	cr->SetLineWidth(2);         // Толщина линии
 	cr->Line(g_vector[0], g_vector[1]);
@@ -163,6 +164,21 @@ void	SetPoint(void)
 	// 	g_color_v.push_back(3);
 	g_vector.push_back(g_coords);
 }
+
+void DrawLine(Context *cr, const Point& p1, const Point& p2)
+{
+    cr->SetColor(RGB(0, 0, 0));
+    cr->SetLineWidth(3);
+    cr->Line(p1, p2);
+}
+
+void DrawRectangle(Context *cr, const Point& p1, const Point& p2)
+{
+    cr->SetColor(RGB(0, 0, 0));
+    cr->SetLineWidth(3);
+    cr->Rectangle(p1, p2);
+}
+
 
 void	UnsetPoint(void)
 {
@@ -266,7 +282,7 @@ void MainWindow::OnNotify(Window *child, uint32_t type, const Point &position)
 		g_help = !g_help;
 		ReDraw();
 	}	
-	else if(type == EVENT_CHMODE g_coords.GetX() + g_psize.GetX())
+	else if(type == EVENT_CHMODE && g_coords.GetX() + g_psize.GetX())
 	{
 		g_mode++;
 		if (g_mode == 3) //LINE
