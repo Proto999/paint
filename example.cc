@@ -53,12 +53,21 @@ public:
 private:
 	RGB         m_color;
 };
-	void DrawLine(const Point& p1, const Point& p2, Context *cr)
+
+	void DrawLine(const Point& p1, const Point& p2, Context *cr, int g_color_f)
 	{
+	if (g_color_v[i] == 1)
+        cr->SetColor(RGB(0, 0, 0)); 
+    else if (g_color_v[i] == 2)
+        cr->SetColor(RGB(1, 0, 0)); 
+    else if (g_color_v[i] == 3)
+        cr->SetColor(RGB(0, 1, 0)); 
+    else	
+		cr->SetColor(RGB(0, 0, 1)); 
 	cr->Line(p1, p2);
 	}
 
-	void DrawRectangle(const Point& p1, const Point& p2, Context *cr)
+	void DrawRectangle(const Point& p1, const Point& p2, Context *cr, int g_color_f)
 	{
     cr->Rectangle(p1, p2);
 	}
@@ -93,8 +102,6 @@ void MainWindow::OnDraw(Context *cr)
 	cr->Text(g_text, "Cantarel", 17, Point(900, 650), 0x01);
 
 	for (int i = 0; i < g_vector.size(); i++)
-	{
-		if (g_color_v[i] == 0)
 			cr->SetColor(RGB(0,0,0));
 		if (g_color_v[i] == 1)
 			cr->SetColor(RGB(1, 0, 0));
@@ -130,8 +137,9 @@ void MainWindow::OnDraw(Context *cr)
 			{
 			Point p1 = g_vector[g_vector.size() - 2];  // Последняя добавленная точка
             Point p2 = g_vector[g_vector.size() - 1];  // Предпоследняя добавленная точка
-			DrawLine(p1, p2, cr);
-			}	
+			DrawLine(p1, p2, cr, g_color_f);
+			ReDraw();
+			
 }
 
 void MainWindow::OnCreate()
