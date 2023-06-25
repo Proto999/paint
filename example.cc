@@ -26,8 +26,7 @@ enum UserEventType
 	
 };
 
-
-std::vector<std::pair<Point, Point>> g_vector;
+std::vector<Point>	g_vector;
 std::vector<int>    g_color_v;
 int                 g_color_f = 0;
 int					g_mode = 0;
@@ -48,8 +47,8 @@ public:
 	bool OnMouseMove(const Point &position);
 	bool OnLeftMouseButtonClick(const Point &position);
 	bool OnRightMouseButtonClick(const Point &position);
-	void OnNotify(Window *child, uint32_t type, const Point &position, Context *cr);
-	bool OnKeyPress(uint64_t value, Context *cr);
+	void OnNotify(Window *child, uint32_t type, const Point &position);
+	bool OnKeyPress(uint64_t value);
 
 private:
 	RGB         m_color;
@@ -57,8 +56,8 @@ private:
 
 	void DrawLine(const Point& p1, const Point& p2, Context *cr)
 	{
-	cr->SetLineWidth(15);
 	cr->Line(p1, p2);
+	cr->SetLineWidth(15);
 	}
 
 	void DrawRectangle(const Point& p1, const Point& p2, Context *cr)
@@ -96,8 +95,7 @@ void MainWindow::OnDraw(Context *cr)
 	cr->Text(g_text, "Cantarel", 17, Point(900, 650), 0x01);
 
 	for (int i = 0; i < g_vector.size(); i++)
-	{
-			cr->SetColor(RGB(0,0,0));
+	{		cr->SetColor(RGB(0,0,0));
 		if (g_color_v[i] == 1)
 			cr->SetColor(RGB(1, 0, 0));
 		if (g_color_v[i] == 2)
@@ -129,21 +127,21 @@ void MainWindow::OnDraw(Context *cr)
 	cr->FillRectangle(g_coords, g_psize);
 
 	if (g_mode == 3) //LINE
-			for (const auto& line : g_vector)
-{
-    const Point& p1 = line.first;
-    const Point& p2 = line.second;
-
-    cr->SetColor(RGB(0, 0, 0));
-    if (g_color_v[i] == 1)
-        cr->SetColor(RGB(1, 0, 0));
-    if (g_color_v[i] == 2)
-        cr->SetColor(RGB(0, 1, 0));
-    if (g_color_v[i] == 3)
-        cr->SetColor(RGB(0, 0, 1));
-    
-    DrawLine(p1, p2, cr);
-}
+			{
+			Point p1 = g_vector[g_vector.size() - 2];  // Последняя добавленная точка
+            Point p2 = g_vector[g_vector.size() - 1];  // Предпоследняя добавленная точка
+		for (int i = 0; i < g_vector.size(); i++)	
+			if (g_color_v[i] == 1)
+        cr->SetColor(RGB(0, 0, 0)); 
+    		else if (g_color_v[i] == 2)
+        cr->SetColor(RGB(1, 0, 0)); 
+    		else if (g_color_v[i] == 3)
+        cr->SetColor(RGB(0, 1, 0)); 
+    		else	
+		cr->SetColor(RGB(0, 0, 1)); 
+			DrawLine(p1, p2, cr);
+			ReDraw();
+			}
 }
 
 void MainWindow::OnCreate()
@@ -171,20 +169,16 @@ void MainWindow::OnCreate()
 
 void	SetPoint(void)
 {
-	if (g_vector.size() > 0)
-    {
-        Point p1 = g_vector[g_vector.size() - 1].first; // Предыдущая конечная точка
-        Point p2(g_coords.GetX(), g_coords.GetY());      // Новая конечная точка
-        g_vector.push_back(std::make_pair(p1, p2));
-    }
-    else
-    {
-        Point p(g_coords.GetX(), g_coords.GetY());       // Начальная и единственная точка
-        g_vector.push_back(std::make_pair(p, p));
-    }
-
-    g_color_v.push_back(g_color_f);
-
+	g_color_v.push_back(g_color_f);
+	// if (g_color_f == 0)
+	// 	g_color_v.push_back(0);
+	// else if (g_color_f == 1)
+	// 	g_color_v.push_back(1);
+	// else if (g_color_f == 2)
+	// 	g_color_v.push_back(2);
+	// else if (g_color_f == 3)
+	// 	g_color_v.push_back(3);
+	g_vector.push_back(g_coords);
 }
 
 
