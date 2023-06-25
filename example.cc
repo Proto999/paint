@@ -34,7 +34,6 @@ char				g_text[11];
 Point				g_coords(0,0);
 Point				g_psize(15,15);
 int					g_help = 0;
-cairo_t*            cr;
 
 // родительское окно
 class MainWindow : public Window
@@ -48,7 +47,7 @@ public:
 	bool OnMouseMove(const Point &position);
 	bool OnLeftMouseButtonClick(const Point &position);
 	bool OnRightMouseButtonClick(const Point &position);
-	void OnNotify(Window *child, uint32_t type, const Point &position);
+	void OnNotify(Window *child, uint32_t type, const Point &position, Context *cr);
 	bool OnKeyPress(uint64_t value);
 
 private:
@@ -68,15 +67,6 @@ void MainWindow::OnDraw(Context *cr)
 	cr->SetColor(RGB(1,1,1));
 	cr->FillRectangle(Point(0,0), Point(1000, 600));
 	
-	cr = cairo_create(surface);
-	cr->SetColor(RGB(0, 0, 0));  // Цвет прямой (черный)
-	cr->SetLineWidth(2);         // Толщина линии
-	cr->Line(g_vector[0], g_vector[1]);
-
-	cr->SetColor(RGB(0, 0, 0));   // Цвет прямоугольника (черный)
-	cr->SetLineWidth(2);          // Толщина линии
-	cr->Rectangle(g_vector[0], g_vector[1]);
-
 	cr->SetColor(RGB(0,0,0));
 	cr->SetLineWidth(3);
 	cr->Line(Point(0,600), Point(1000, 600));
@@ -165,20 +155,6 @@ void	SetPoint(void)
 	g_vector.push_back(g_coords);
 }
 
-void DrawLine(Context *cr, const Point& p1, const Point& p2)
-{
-    cr->SetColor(RGB(0, 0, 0));
-    cr->SetLineWidth(3);
-    cr->Line(p1, p2);
-}
-
-void DrawRectangle(Context *cr, const Point& p1, const Point& p2)
-{
-    cr->SetColor(RGB(0, 0, 0));
-    cr->SetLineWidth(3);
-    cr->Rectangle(p1, p2);
-}
-
 
 void	UnsetPoint(void)
 {
@@ -192,8 +168,31 @@ void	UnsetPoint(void)
 	}
 }
 
-void MainWindow::OnNotify(Window *child, uint32_t type, const Point &position)
+void MainWindow::OnNotify(Window *child, uint32_t type, const Point &position, Context *cr)
 {
+
+	cr->SetColor(RGB(0, 0, 0));  // Цвет прямой (черный)
+	cr->SetLineWidth(2);         // Толщина линии
+	cr->Line(g_vector[0], g_vector[1]);
+
+	cr->SetColor(RGB(0, 0, 0));   // Цвет прямоугольника (черный)
+	cr->SetLineWidth(2);          // Толщина линии
+	cr->Rectangle(g_vector[0], g_vector[1]);
+
+		void DrawLine(const Point& p1, const Point& p2,)
+		{
+		cr->SetColor(RGB(0, 0, 0));
+		cr->SetLineWidth(3);
+		cr->Line(p1, p2);
+		}
+
+		void DrawRectangle(const Point& p1, const Point& p2)
+		{
+    	cr->SetColor(RGB(0, 0, 0));
+    	cr->SetLineWidth(3);
+    	cr->Rectangle(p1, p2);
+		}
+
 	std::cout << "MainWindow::OnNotify()" << std::endl;
 	if(type == EVENT_CLOSE)
 	{
@@ -286,7 +285,9 @@ void MainWindow::OnNotify(Window *child, uint32_t type, const Point &position)
 	{
 		g_mode++;
 		if (g_mode == 3) //LINE
-			DrawLine(cr, g_vector[0], g_vector[1]);	
+			Point p1 = g_vector[g_vector.size() - 2];  // Последняя добавленная точка
+            Point p2 = g_vector[g_vector.size() - 1];  // Предпоследняя добавленная точка
+			DrawLine(cr, p1, p2);	
 		ReDraw();
 	}
 }	
