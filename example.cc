@@ -48,11 +48,20 @@ public:
 	bool OnLeftMouseButtonClick(const Point &position);
 	bool OnRightMouseButtonClick(const Point &position);
 	void OnNotify(Window *child, uint32_t type, const Point &position, Context *cr);
-	bool OnKeyPress(uint64_t value);
+	bool OnKeyPress(uint64_t value, Context *cr);
 
 private:
 	RGB         m_color;
 };
+	void DrawLine(const Point& p1, const Point& p2, Context *cr)
+	{
+	cr->Line(p1, p2);
+	}
+
+	void DrawRectangle(const Point& p1, const Point& p2, Context *cr)
+	{
+    cr->Rectangle(p1, p2);
+	}
 
 void MainWindow::OnDraw(Context *cr)
 {
@@ -116,6 +125,13 @@ void MainWindow::OnDraw(Context *cr)
 
 	cr->SetColor(RGB(0.5,0.1,0.9));
 	cr->FillRectangle(g_coords, g_psize);
+
+	if (g_mode == 3) //LINE
+			{
+			Point p1 = g_vector[g_vector.size() - 2];  // Последняя добавленная точка
+            Point p2 = g_vector[g_vector.size() - 1];  // Предпоследняя добавленная точка
+			DrawLine(p1, p2, cr);
+			}	
 }
 
 void MainWindow::OnCreate()
@@ -167,15 +183,7 @@ void	UnsetPoint(void)
 		}	 
 	}
 }
-	void DrawLine(const Point& p1, const Point& p2, Context *cr)
-		{
-		cr->Line(p1, p2);
-		}
 
-	void DrawRectangle(const Point& p1, const Point& p2, Context *cr)
-		{
-    	cr->Rectangle(p1, p2);
-		}
 
 void MainWindow::OnNotify(Window *child, uint32_t type, const Point &position, Context *cr)
 {
@@ -301,7 +309,7 @@ bool MainWindow::OnRightMouseButtonClick(const Point &position)
 	return true;
 }
 
-bool MainWindow::OnKeyPress(uint64_t keyval)
+bool MainWindow::OnKeyPress(uint64_t keyval, Context *cr)
 {
 	std::cout << "MainWindow::OnKeyPress(" << keyval << ")" << std::endl;
 
@@ -363,12 +371,6 @@ bool MainWindow::OnKeyPress(uint64_t keyval)
 		g_mode++;
 		if (g_mode == 5)
 			g_mode = 0;
-		if (g_mode == 3) //LINE
-			{
-			Point p1 = g_vector[g_vector.size() - 2];  // Последняя добавленная точка
-            Point p2 = g_vector[g_vector.size() - 1];  // Предпоследняя добавленная точка
-			DrawLine(p1, p2, cr);
-			}	
 	}
 	if (keyval == 'n')
 	{
