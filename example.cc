@@ -167,6 +167,19 @@ void	UnsetPoint(void)
 		}	 
 	}
 }
+void DrawLine(const Point& p1, const Point& p2, Context *cr)
+		{
+		cr->SetColor(RGB(0, 0, 0));
+		cr->SetLineWidth(3);
+		cr->Line(p1, p2);
+		}
+
+		void DrawRectangle(const Point& p1, const Point& p2, Context *cr)
+		{
+    	cr->SetColor(RGB(0, 0, 0));
+    	cr->SetLineWidth(3);
+    	cr->Rectangle(p1, p2);
+		}
 
 void MainWindow::OnNotify(Window *child, uint32_t type, const Point &position, Context *cr)
 {
@@ -179,19 +192,7 @@ void MainWindow::OnNotify(Window *child, uint32_t type, const Point &position, C
 	cr->SetLineWidth(2);          // Толщина линии
 	cr->Rectangle(g_vector[0], g_vector[1]);
 
-		void DrawLine(const Point& p1, const Point& p2,)
-		{
-		cr->SetColor(RGB(0, 0, 0));
-		cr->SetLineWidth(3);
-		cr->Line(p1, p2);
-		}
-
-		void DrawRectangle(const Point& p1, const Point& p2)
-		{
-    	cr->SetColor(RGB(0, 0, 0));
-    	cr->SetLineWidth(3);
-    	cr->Rectangle(p1, p2);
-		}
+		
 
 	std::cout << "MainWindow::OnNotify()" << std::endl;
 	if(type == EVENT_CLOSE)
@@ -287,7 +288,7 @@ void MainWindow::OnNotify(Window *child, uint32_t type, const Point &position, C
 		if (g_mode == 3) //LINE
 			Point p1 = g_vector[g_vector.size() - 2];  // Последняя добавленная точка
             Point p2 = g_vector[g_vector.size() - 1];  // Предпоследняя добавленная точка
-			DrawLine(cr, p1, p2);	
+			DrawLine(p1, p2, cr);	
 		ReDraw();
 	}
 }	
