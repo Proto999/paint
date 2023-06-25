@@ -56,13 +56,19 @@ private:
 
 	void DrawLine(const Point& p1, const Point& p2, Context *cr)
 	{
-	cr->Line(p1, p2);
 	cr->SetLineWidth(15);
+	cr->Line(p1, p2);
 	}
 
 	void DrawRectangle(const Point& p1, const Point& p2, Context *cr)
 	{
+	cr->SetLineWidth(15);
     cr->Rectangle(p1, p2);
+	}
+	void DrawFillRectangle(const Point& p1, const Point& p2, Context *cr)
+	{
+	cr->SetLineWidth(15);
+    cr->FillRectangle(p1, p2);
 	}
 
 void MainWindow::OnDraw(Context *cr)
@@ -91,11 +97,13 @@ void MainWindow::OnDraw(Context *cr)
 		cr->Text(" Line ", "Cantarel", 17, Point(900, 625), 0x01);
 	else if (g_mode == 4)
 		cr->Text(" Rectangle ", "Cantarel", 17, Point(900, 625), 0x01);
+	else if (g_mode == 5)
+		cr->Text(" Fill Rectangle ", "Cantarel", 17, Point(900, 625), 0x01);
 	sprintf(g_text, "%ld", g_vector.size());
 	cr->Text(g_text, "Cantarel", 17, Point(900, 650), 0x01);
 
 	for (int i = 0; i < g_vector.size(); i++)
-	{		cr->SetColor(RGB(0,0,0));
+	{		cr->SetColor(RGB(0 ,0 ,0));
 		if (g_color_v[i] == 1)
 			cr->SetColor(RGB(1, 0, 0));
 		if (g_color_v[i] == 2)
@@ -128,20 +136,58 @@ void MainWindow::OnDraw(Context *cr)
 
 	if (g_mode == 3) //LINE
 			{
+				{	
 			Point p1 = g_vector[g_vector.size() - 2];  // Последняя добавленная точка
             Point p2 = g_vector[g_vector.size() - 1];  // Предпоследняя добавленная точка
-		for (int i = 0; i < g_vector.size(); i++)	
-			if (g_color_v[i] == 1)
-        cr->SetColor(RGB(0, 0, 0)); 
-    		else if (g_color_v[i] == 2)
-        cr->SetColor(RGB(1, 0, 0)); 
-    		else if (g_color_v[i] == 3)
-        cr->SetColor(RGB(0, 1, 0)); 
-    		else	
-		cr->SetColor(RGB(0, 0, 1)); 
+		for (int i = 0; i < g_vector.size(); i++)
+	{		cr->SetColor(RGB(0 ,0 ,0));
+		if (g_color_v[i] == 1)
+			cr->SetColor(RGB(1, 0, 0));
+		if (g_color_v[i] == 2)
+			cr->SetColor(RGB(0, 1, 0));
+		if (g_color_v[i] == 3)
+			cr->SetColor(RGB(0, 0, 1));
+	}
 			DrawLine(p1, p2, cr);
+				}
 			ReDraw();
 			}
+	if (g_mode == 4) //Rectangle
+			{
+				{
+			Point p1 = g_vector[g_vector.size() - 2];  // Последняя добавленная точка
+            Point p2 = g_vector[g_vector.size() - 1];  // Предпоследняя добавленная точка
+		for (int i = 0; i < g_vector.size(); i++)
+	{		cr->SetColor(RGB(0 ,0 ,0));
+		if (g_color_v[i] == 1)
+			cr->SetColor(RGB(1, 0, 0));
+		if (g_color_v[i] == 2)
+			cr->SetColor(RGB(0, 1, 0));
+		if (g_color_v[i] == 3)
+			cr->SetColor(RGB(0, 0, 1));
+	}
+			DrawRectangle(p1, p2, cr);
+				}
+			ReDraw();
+			}
+	if (g_mode == 5) //Fill Rectangle
+			{
+				{
+			Point p1 = g_vector[g_vector.size() - 2];  // Последняя добавленная точка
+            Point p2 = g_vector[g_vector.size() - 1];  // Предпоследняя добавленная точка
+		for (int i = 0; i < g_vector.size(); i++)
+	{		cr->SetColor(RGB(0 ,0 ,0));
+		if (g_color_v[i] == 1)
+			cr->SetColor(RGB(1, 0, 0));
+		if (g_color_v[i] == 2)
+			cr->SetColor(RGB(0, 1, 0));
+		if (g_color_v[i] == 3)
+			cr->SetColor(RGB(0, 0, 1));
+	}
+			DrawFillRectangle(p1, p2, cr);
+				}
+			ReDraw();
+			}		
 }
 
 void MainWindow::OnCreate()
@@ -151,11 +197,7 @@ void MainWindow::OnCreate()
 	AddChild(new Button(" UP ",EVENT_UP), Point(450,600), Point(100,50));
 	AddChild(new Button(" DOWN ",EVENT_DOWN), Point(450,650), Point(100,50));
 	AddChild(new Button(" <- ",EVENT_LEFT), Point(350,650), Point(100,50));
-
-
 	AddChild(new Button(" -> ",EVENT_RIGHT), Point(550,650), Point(100,50));
-	
-
 	AddChild(new Button(" SET ",EVENT_SET), Point(150,650), Point(50,50));
 	AddChild(new Button("UNSET",EVENT_UNSET), Point(200,650), Point(50,50));
 	AddChild(new Button(" CLEAR ",EVENT_CLEAR), Point(150,600), Point(100,50));
@@ -170,14 +212,6 @@ void MainWindow::OnCreate()
 void	SetPoint(void)
 {
 	g_color_v.push_back(g_color_f);
-	// if (g_color_f == 0)
-	// 	g_color_v.push_back(0);
-	// else if (g_color_f == 1)
-	// 	g_color_v.push_back(1);
-	// else if (g_color_f == 2)
-	// 	g_color_v.push_back(2);
-	// else if (g_color_f == 3)
-	// 	g_color_v.push_back(3);
 	g_vector.push_back(g_coords);
 }
 
@@ -195,7 +229,7 @@ void	UnsetPoint(void)
 }
 
 
-void MainWindow::OnNotify(Window *child, uint32_t type, const Point &position, Context *cr)
+void MainWindow::OnNotify(Window *child, uint32_t type, const Point &position)
 {
 
 	std::cout << "MainWindow::OnNotify()" << std::endl;
@@ -257,7 +291,7 @@ void MainWindow::OnNotify(Window *child, uint32_t type, const Point &position, C
 	else if(type == EVENT_CHMODE)
 	{
 		g_mode++;
-		if (g_mode == 4)
+		if (g_mode == 5)
 			g_mode = 0;
 		ReDraw();
 	}
@@ -319,7 +353,7 @@ bool MainWindow::OnRightMouseButtonClick(const Point &position)
 	return true;
 }
 
-bool MainWindow::OnKeyPress(uint64_t keyval, Context *cr)
+bool MainWindow::OnKeyPress(uint64_t keyval)
 {
 	std::cout << "MainWindow::OnKeyPress(" << keyval << ")" << std::endl;
 
