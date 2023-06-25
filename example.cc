@@ -27,8 +27,7 @@ enum UserEventType
 };
 
 
-std::vector<Line>	g_lines;
-std::vector<Point>	g_vector;
+std::vector<std::pair<Point, Point>> g_vector;
 std::vector<int>    g_color_v;
 int                 g_color_f = 0;
 int					g_mode = 0;
@@ -36,15 +35,6 @@ char				g_text[11];
 Point				g_coords(0,0);
 Point				g_psize(15,15);
 int					g_help = 0;
-
-class Line 
-{
-public:
-    Point p1;
-    Point p2;
-
-    Line(const Point& start, const Point& end) : p1(start), p2(end) {}
-};
 
 // родительское окно
 class MainWindow : public Window
@@ -73,7 +63,6 @@ private:
 
 	void DrawRectangle(const Point& p1, const Point& p2, Context *cr)
 	{
-	cr->SetLineWidth(15);
     cr->Rectangle(p1, p2);
 	}
 
@@ -140,21 +129,20 @@ void MainWindow::OnDraw(Context *cr)
 	cr->FillRectangle(g_coords, g_psize);
 
 	if (g_mode == 3) //LINE
+			for (const auto& line : g_vector)
 {
-	for (const auto& line : g_lines)
-		for (int i = 0; i < g_vector.size(); i++)
-		{
-		if (g_color_v[i] == 1)
-        cr->SetColor(RGB(0, 0, 0)); 
-    	else if (g_color_v[i] == 2)
-        cr->SetColor(RGB(1, 0, 0)); 
-    	else if (g_color_v[i] == 3)
-        cr->SetColor(RGB(0, 1, 0)); 
-    	else	
-		cr->SetColor(RGB(0, 0, 1)); 
-		}
-			DrawLine(line.p1, line.p2, cr);
-			ReDraw();
+    const Point& p1 = line.first;
+    const Point& p2 = line.second;
+
+    cr->SetColor(RGB(0, 0, 0));
+    if (g_color_v[i] == 1)
+        cr->SetColor(RGB(1, 0, 0));
+    if (g_color_v[i] == 2)
+        cr->SetColor(RGB(0, 1, 0));
+    if (g_color_v[i] == 3)
+        cr->SetColor(RGB(0, 0, 1));
+    
+    DrawLine(p1, p2, cr);
 }
 }
 
@@ -183,16 +171,20 @@ void MainWindow::OnCreate()
 
 void	SetPoint(void)
 {
-	g_color_v.push_back(g_color_f);
-	g_vector.push_back(g_coords);
-	{
-	if (g_vector.size() >= 2) 
-		{
-        Point p1 = g_vector[g_vector.size() - 2];
-        Point p2 = g_vector[g_vector.size() - 1];
-        g_lines.emplace_back(p1, p2);
-		}
-	}
+	if (g_vector.size() > 0)
+    {
+        Point p1 = g_vector[g_vector.size() - 1].first; // Предыдущая конечная точка
+        Point p2(g_coords.GetX(), g_coords.GetY());      // Новая конечная точка
+        g_vector.push_back(std::make_pair(p1, p2));
+    }
+    else
+    {
+        Point p(g_coords.GetX(), g_coords.GetY());       // Начальная и единственная точка
+        g_vector.push_back(std::make_pair(p, p));
+    }
+
+    g_color_v.push_back(g_color_f);
+
 }
 
 
