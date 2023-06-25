@@ -167,32 +167,18 @@ void	UnsetPoint(void)
 		}	 
 	}
 }
-void DrawLine(const Point& p1, const Point& p2, Context *cr)
+	void DrawLine(const Point& p1, const Point& p2, Context *cr)
 		{
-		cr->SetColor(RGB(0, 0, 0));
-		cr->SetLineWidth(3);
 		cr->Line(p1, p2);
 		}
 
-		void DrawRectangle(const Point& p1, const Point& p2, Context *cr)
+	void DrawRectangle(const Point& p1, const Point& p2, Context *cr)
 		{
-    	cr->SetColor(RGB(0, 0, 0));
-    	cr->SetLineWidth(3);
     	cr->Rectangle(p1, p2);
 		}
 
 void MainWindow::OnNotify(Window *child, uint32_t type, const Point &position, Context *cr)
 {
-
-	cr->SetColor(RGB(0, 0, 0));  // Цвет прямой (черный)
-	cr->SetLineWidth(2);         // Толщина линии
-	cr->Line(g_vector[0], g_vector[1]);
-
-	cr->SetColor(RGB(0, 0, 0));   // Цвет прямоугольника (черный)
-	cr->SetLineWidth(2);          // Толщина линии
-	cr->Rectangle(g_vector[0], g_vector[1]);
-
-		
 
 	std::cout << "MainWindow::OnNotify()" << std::endl;
 	if(type == EVENT_CLOSE)
@@ -253,7 +239,7 @@ void MainWindow::OnNotify(Window *child, uint32_t type, const Point &position, C
 	else if(type == EVENT_CHMODE)
 	{
 		g_mode++;
-		if (g_mode == 2)
+		if (g_mode == 4)
 			g_mode = 0;
 		ReDraw();
 	}
@@ -282,15 +268,7 @@ void MainWindow::OnNotify(Window *child, uint32_t type, const Point &position, C
 		g_help = !g_help;
 		ReDraw();
 	}	
-	else if(type == EVENT_CHMODE && g_coords.GetX() + g_psize.GetX())
-	{
-		g_mode++;
-		if (g_mode == 3) //LINE
-			Point p1 = g_vector[g_vector.size() - 2];  // Последняя добавленная точка
-            Point p2 = g_vector[g_vector.size() - 1];  // Предпоследняя добавленная точка
-			DrawLine(p1, p2, cr);	
-		ReDraw();
-	}
+	
 }	
 
 bool MainWindow::OnMouseMove(const Point &position)
@@ -383,8 +361,14 @@ bool MainWindow::OnKeyPress(uint64_t keyval)
 	if (keyval == 'e')
 	{
 		g_mode++;
-		if (g_mode == 3)
+		if (g_mode == 5)
 			g_mode = 0;
+		if (g_mode == 3) //LINE
+			{
+			Point p1 = g_vector[g_vector.size() - 2];  // Последняя добавленная точка
+            Point p2 = g_vector[g_vector.size() - 1];  // Предпоследняя добавленная точка
+			DrawLine(p1, p2, cr);
+			}	
 	}
 	if (keyval == 'n')
 	{
