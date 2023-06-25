@@ -291,7 +291,7 @@ void MainWindow::OnNotify(Window *child, uint32_t type, const Point &position)
 	else if(type == EVENT_CHMODE)
 	{
 		g_mode++;
-		if (g_mode == 5)
+		if (g_mode == 6)
 			g_mode = 0;
 		ReDraw();
 	}
@@ -413,7 +413,7 @@ bool MainWindow::OnKeyPress(uint64_t keyval)
 	if (keyval == 'e')
 	{
 		g_mode++;
-		if (g_mode == 5)
+		if (g_mode == 6)
 			g_mode = 0;
 	}
 	if (keyval == 'n')
