@@ -23,6 +23,9 @@ enum UserEventType
 	EVENT_BLUE,
 	EVENT_BLACK,
 	EVENT_HELP,
+	EVENT_CHANGE_G_PSIZE_WIDTH,
+	EVENT_CHANGE_G_PSIZE_HEIGHT,
+	EVENT_CHANGE_LINE_WIDTH,
 	
 };
 
@@ -38,6 +41,11 @@ int					g_help = 0;
 // родительское окно
 class MainWindow : public Window
 {
+	private:
+	int g_psizeWidth;
+	int g_psizeHeight;
+	int lineWidth;
+
 public:
 	MainWindow() {}
 	~MainWindow() {}
@@ -207,6 +215,11 @@ void MainWindow::OnCreate()
 	AddChild(new Button(" B ",EVENT_BLUE), Point(800,650), Point(25,50));
 	AddChild(new Button(" BL ",EVENT_BLACK), Point(825,650), Point(25,50));
 	AddChild(new Button(" HELP ",EVENT_HELP), Point(50,600), Point(100,50));
+	
+	AddChild(new Button("Change Width", EVENT_CHANGE_G_PSIZE_WIDTH), Point(900, 100), Point(100, 30));
+	AddChild(new Button("Change Height", EVENT_CHANGE_G_PSIZE_HEIGHT), Point(900, 150), Point(100, 30));
+	AddChild(new Button("Change Line Width", EVENT_CHANGE_LINE_WIDTH), Point(900, 200), Point(100, 30));
+
 }
 
 void	SetPoint(void)
@@ -320,7 +333,36 @@ void MainWindow::OnNotify(Window *child, uint32_t type, const Point &position)
 		g_help = !g_help;
 		ReDraw();
 	}	
-	
+	else if (type == EVENT_CHANGE_G_PSIZE_WIDTH)
+	{
+		if (g_psizeWidth < 15) {
+    	g_psizeWidth += 1;
+		} else {
+   	 	g_psizeWidth = 1;
+		}
+		g_psize.SetX(g_psizeWidth);
+		ReDraw();
+	}
+	else if (type == EVENT_CHANGE_G_PSIZE_HEIGHT)
+	{
+		if (g_psizeHeight < 15) {
+    	g_psizeHeight += 1;
+		} else {
+   	 	g_psizeHeight = 1;
+		}
+		g_psize.SetY(g_psizeHeight);
+		ReDraw();
+	}
+	else if (type == EVENT_CHANGE_LINE_WIDTH)
+	{
+		if (lineWidth < 15) {
+    	lineWidth += 1;
+		} else {
+   	 	lineWidth = 1;
+		}
+		SetLineWidth(lineWidth);
+		ReDraw();
+	}
 }	
 
 bool MainWindow::OnMouseMove(const Point &position)
