@@ -222,11 +222,11 @@ void MainWindow::OnCreate()
 	AddChild(new Button(" BL ",EVENT_BLACK), Point(825,650), Point(25,50));
 	AddChild(new Button(" HELP ",EVENT_HELP), Point(50,600), Point(100,50));
 	
-	AddChild(new Button("Change Width", EVENT_CHANGE_G_PSIZE_WIDTH), Point(900, 700), Point(100, 30));
-	AddChild(new Button("Change Height", EVENT_CHANGE_G_PSIZE_HEIGHT), Point(900, 750), Point(100, 30));
-	AddChild(new Button("Change Line Width", EVENT_CHANGE_LINE_WIDTH), Point(900, 800), Point(100, 30));
+	AddChild(new Button("Change Width", EVENT_CHANGE_G_PSIZE_WIDTH), Point(900, 650), Point(150, 30));
+	AddChild(new Button("Change Height", EVENT_CHANGE_G_PSIZE_HEIGHT), Point(900, 700), Point(150, 30));
+	AddChild(new Button("Change Line Width", EVENT_CHANGE_LINE_WIDTH), Point(900, 750), Point(150, 30));
 
-	AddChild(new Button("SAVE", EVENT_CLOSE_AND_SAVE), Point(150, 550), Point(25, 50));
+	AddChild(new Button("SAVE", EVENT_CLOSE_AND_SAVE), Point(150, 750), Point(25, 75));
 }
 
 void	SetPoint(void)
