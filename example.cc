@@ -99,19 +99,19 @@ void MainWindow::OnDraw(Context *cr)
 	cr->SetLineWidth(3);
 	cr->Line(Point(0,600), Point(1000, 600));
 	if (g_mode == 0)
-		cr->Text(" Moving ", "Cantarel", 17, Point(900, 625), 0x01);
+		cr->Text(" Moving ", "Cantarel", 17, Point(900, 615), 0x01);
 	else if (g_mode == 1)
-		cr->Text(" Printing ", "Cantarel", 17, Point(900, 625), 0x01);
+		cr->Text(" Printing ", "Cantarel", 17, Point(900, 615), 0x01);
 	else if (g_mode == 2)
-		cr->Text(" Erasing ", "Cantarel", 17, Point(900, 625), 0x01);
+		cr->Text(" Erasing ", "Cantarel", 17, Point(900, 615), 0x01);
 	else if (g_mode == 3)
-		cr->Text(" Line ", "Cantarel", 17, Point(900, 625), 0x01);
+		cr->Text(" Line ", "Cantarel", 17, Point(900, 615), 0x01);
 	else if (g_mode == 4)
-		cr->Text(" Rectangle ", "Cantarel", 17, Point(900, 625), 0x01);
+		cr->Text(" Rectangle ", "Cantarel", 17, Point(900, 615), 0x01);
 	else if (g_mode == 5)
-		cr->Text(" Fill Rectangle ", "Cantarel", 17, Point(900, 625), 0x01);
+		cr->Text(" Fill Rectangle ", "Cantarel", 17, Point(900, 615), 0x01);
 	sprintf(g_text, "%ld", g_vector.size());
-	cr->Text(g_text, "Cantarel", 17, Point(900, 650), 0x01);
+	cr->Text(g_text, "Cantarel", 17, Point(900, 635), 0x01);
 
 	for (int i = 0; i < g_vector.size(); i++)
 	{		cr->SetColor(RGB(0 ,0 ,0));
@@ -220,13 +220,13 @@ void MainWindow::OnCreate()
 	AddChild(new Button(" G ",EVENT_GREEN), Point(775,650), Point(25,50));
 	AddChild(new Button(" B ",EVENT_BLUE), Point(800,650), Point(25,50));
 	AddChild(new Button(" BL ",EVENT_BLACK), Point(825,650), Point(25,50));
-	AddChild(new Button(" HELP ",EVENT_HELP), Point(50,600), Point(100,50));
 	
+	AddChild(new Button(" HELP ",EVENT_HELP), Point(50,600), Point(100,50));
+	AddChild(new Button("SAVE", EVENT_CLOSE_AND_SAVE), Point(50, 650), Point(100, 50));
+
 	AddChild(new Button("Change Width", EVENT_CHANGE_G_PSIZE_WIDTH), Point(900, 650), Point(150, 30));
 	AddChild(new Button("Change Height", EVENT_CHANGE_G_PSIZE_HEIGHT), Point(900, 700), Point(150, 30));
 	AddChild(new Button("Change Line Width", EVENT_CHANGE_LINE_WIDTH), Point(900, 750), Point(150, 30));
-
-	AddChild(new Button("SAVE", EVENT_CLOSE_AND_SAVE), Point(150, 750), Point(25, 75));
 }
 
 void	SetPoint(void)
