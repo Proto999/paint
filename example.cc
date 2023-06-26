@@ -62,22 +62,19 @@ private:
 	RGB         m_color;
 };
 
-	void DrawLine(const Point& p1, const Point& p2, Context *cr, width int)
+	void DrawLine(const Point& p1, const Point& p2, Context *cr)
 	{
-	cr->SetLineWidth(15);
 	cr->Line(p1, p2);
 	}
 
 	void DrawRectangle(const Point& p1, const Point& p2, Context *cr)
 	{
-	cr->SetLineWidth(15);
     cr->Rectangle(p1, p2);
 	}
+
 	void DrawFillRectangle(const Point& p1, const Point& p2, Context *cr)
 	{
-	cr->SetLineWidth(15);
     cr->FillRectangle(p1, p2);
-	
 	}
 
 void MainWindow::OnDraw(Context *cr)
@@ -157,14 +154,7 @@ void MainWindow::OnDraw(Context *cr)
 		if (g_color_v[i] == 3)
 			cr->SetColor(RGB(0, 0, 1));
 	}
-		for (int width = 1; width < g_vector.size(); width++)
-			cr->SetLineWidth(1);
-		if	(width = 2)
-			cr->SetLineWidth(2);
-		if	(width = 3)
-			cr->SetLineWidth(3);
-		if	(width = 2)
-			cr->SetLineWidth(3);
+			cr->SetLineWidth(width);
 			DrawLine(p1, p2, cr);
 				}
 			ReDraw();
@@ -183,6 +173,7 @@ void MainWindow::OnDraw(Context *cr)
 		if (g_color_v[i] == 3)
 			cr->SetColor(RGB(0, 0, 1));
 	}
+			cr->SetLineWidth(width);
 			DrawRectangle(p1, p2, cr);
 				}
 			ReDraw();
@@ -201,6 +192,7 @@ void MainWindow::OnDraw(Context *cr)
 		if (g_color_v[i] == 3)
 			cr->SetColor(RGB(0, 0, 1));
 	}
+			cr->SetLineWidth(width);
 			DrawFillRectangle(p1, p2, cr);
 				}
 			ReDraw();
@@ -225,9 +217,9 @@ void MainWindow::OnCreate()
 	AddChild(new Button(" BL ",EVENT_BLACK), Point(825,650), Point(25,50));
 	AddChild(new Button(" HELP ",EVENT_HELP), Point(50,600), Point(100,50));
 	
-	AddChild(new Button("Change Width", EVENT_CHANGE_G_PSIZE_WIDTH), Point(900, 100), Point(100, 30));
-	AddChild(new Button("Change Height", EVENT_CHANGE_G_PSIZE_HEIGHT), Point(900, 150), Point(100, 30));
-	AddChild(new Button("Change Line Width", EVENT_CHANGE_LINE_WIDTH), Point(900, 200), Point(100, 30));
+	AddChild(new Button("Change Width", EVENT_CHANGE_G_PSIZE_WIDTH), Point(900, 700), Point(100, 30));
+	AddChild(new Button("Change Height", EVENT_CHANGE_G_PSIZE_HEIGHT), Point(900, 750), Point(100, 30));
+	AddChild(new Button("Change Line Width", EVENT_CHANGE_LINE_WIDTH), Point(900, 800), Point(100, 30));
 
 }
 
@@ -369,7 +361,6 @@ void MainWindow::OnNotify(Window *child, uint32_t type, const Point &position)
 		} else {
    	 	width = 1;
 		}
-		SetLineWidth(width);
 		ReDraw();
 	}
 }	
@@ -482,6 +473,14 @@ bool MainWindow::OnKeyPress(uint64_t keyval)
 	if (keyval == 'b')
 	{
 		g_color_f = 3;
+	}
+	if (keyval == ']')
+	{
+		width = width + 1;
+	}
+	if (keyval == '[')
+	{
+		width = width - 1;
 	}
 	ReDraw();
 	return true;
