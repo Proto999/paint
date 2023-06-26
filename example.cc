@@ -26,6 +26,7 @@ enum UserEventType
 	EVENT_CHANGE_G_PSIZE_WIDTH,
 	EVENT_CHANGE_G_PSIZE_HEIGHT,
 	EVENT_CHANGE_LINE_WIDTH,
+	EVENT_CLOSE_AND_SAVE,
 	
 };
 
@@ -221,6 +222,7 @@ void MainWindow::OnCreate()
 	AddChild(new Button("Change Height", EVENT_CHANGE_G_PSIZE_HEIGHT), Point(900, 750), Point(100, 30));
 	AddChild(new Button("Change Line Width", EVENT_CHANGE_LINE_WIDTH), Point(900, 800), Point(100, 30));
 
+	AddChild(new Button("SAVE", EVENT_CLOSE_AND_SAVE), Point(150, 550), Point(25, 50));
 }
 
 void	SetPoint(void)
@@ -363,6 +365,11 @@ void MainWindow::OnNotify(Window *child, uint32_t type, const Point &position)
 		}
 		ReDraw();
 	}
+	 else if (type == EVENT_CLOSE)
+    {
+        // Сохранение нарисованного в файл
+        Context *cr = GetContext();
+        cr->WriteToPNG("drawing.png");
 }	
 
 bool MainWindow::OnMouseMove(const Point &position)
@@ -481,6 +488,10 @@ bool MainWindow::OnKeyPress(uint64_t keyval)
 	if (keyval == '[')
 	{
 		width = width - 1;
+	}
+	if (keyval == 'l')
+	{
+	cr->WriteToPNG("drawing.png");
 	}
 	ReDraw();
 	return true;
