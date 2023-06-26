@@ -492,10 +492,10 @@ bool MainWindow::OnKeyPress(uint64_t keyval)
 	{
 		width = width - 1;
 	}
-	if (keyval == 'l')
-	{
-	cr->WriteToPNG("drawing.png");
-	}
+	//if (keyval == 'l')
+	//{
+	//cr->WriteToPNG("drawing.png");
+	//}
 	ReDraw();
 	return true;
 }
