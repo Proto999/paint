@@ -115,17 +115,17 @@ void CairoContext::Text(const char *text, const char *fontface,
     cairo_show_text (m_cr, text);
 }
 
-bool CairoContext::LoadImagePNG(const char *filename, int32_t *width, int32_t *height)
-{
-    m_image = cairo_image_surface_create_from_png(filename);
-    if(cairo_surface_status(m_image) != CAIRO_STATUS_SUCCES)
-    {
-        return false;
-    }
-    *width = cairo_image_surface_get_width(m_image);
-    *height = cairo_image_surface_get_height(m_image);
-    return true;
-}
+//bool CairoContext::LoadImagePNG(const char *filename, int32_t *width, int32_t *height)
+//{
+   // m_image = cairo_image_surface_create_from_png(filename);
+    //if(cairo_surface_status(m_image) != CAIRO_STATUS_SUCCES)
+    //{
+   //     return false;
+   // }
+   // *width = cairo_image_surface_get_width(m_image);
+   // *height = cairo_image_surface_get_height(m_image);
+   // return true;
+//}
 
 
 GtkPlus::GtkPlus()
