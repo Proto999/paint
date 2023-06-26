@@ -109,7 +109,7 @@ void MainWindow::OnDraw(Context *cr)
 	else if (g_mode == 4)
 		cr->Text(" Rectangle ", "Cantarel", 17, Point(900, 615), 0x01);
 	else if (g_mode == 5)
-		cr->Text(" Fill Rectangle ", "Cantarel", 17, Point(900, 615), 0x01);
+		cr->Text(" Fill Rectangle ", "Cantarel", 17, Point(950, 615), 0x01);
 	sprintf(g_text, "%ld", g_vector.size());
 	cr->Text(g_text, "Cantarel", 17, Point(900, 635), 0x01);
 
