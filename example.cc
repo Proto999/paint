@@ -77,6 +77,10 @@ private:
 	{
     cr->FillRectangle(p1, p2);
 	}
+	bool LoadImagePNG(const char *filename, int32_t *width, int32_t *height, Context *cr)
+	{
+	 cr-LoadImagePNG("drawing.png", 1000, 600);
+	}
 
 void MainWindow::OnDraw(Context *cr)
 {
@@ -365,11 +369,10 @@ void MainWindow::OnNotify(Window *child, uint32_t type, const Point &position)
 		}
 		ReDraw();
 	}
-	 else if (type == EVENT_CLOSE)
+	 else if (type == EVENT_CLOSE_AND_SAVE)
     {
-        // Сохранение нарисованного в файл
-        Context *cr = GetContext();
-        cr->WriteToPNG("drawing.png");
+    LoadImagePNG(drawing.png, 1000, 600,)
+	}
 }	
 
 bool MainWindow::OnMouseMove(const Point &position)
