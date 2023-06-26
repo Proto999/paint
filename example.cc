@@ -44,7 +44,7 @@ class MainWindow : public Window
 	private:
 	int g_psizeWidth;
 	int g_psizeHeight;
-	int lineWidth;
+	int width;
 
 public:
 	MainWindow() {}
@@ -62,7 +62,7 @@ private:
 	RGB         m_color;
 };
 
-	void DrawLine(const Point& p1, const Point& p2, Context *cr)
+	void DrawLine(const Point& p1, const Point& p2, Context *cr, width int)
 	{
 	cr->SetLineWidth(15);
 	cr->Line(p1, p2);
@@ -77,6 +77,7 @@ private:
 	{
 	cr->SetLineWidth(15);
     cr->FillRectangle(p1, p2);
+	
 	}
 
 void MainWindow::OnDraw(Context *cr)
@@ -156,6 +157,14 @@ void MainWindow::OnDraw(Context *cr)
 		if (g_color_v[i] == 3)
 			cr->SetColor(RGB(0, 0, 1));
 	}
+		for (int width = 1; width < g_vector.size(); width++)
+			cr->SetLineWidth(1);
+		if	(width = 2)
+			cr->SetLineWidth(2);
+		if	(width = 3)
+			cr->SetLineWidth(3);
+		if	(width = 2)
+			cr->SetLineWidth(3);
 			DrawLine(p1, p2, cr);
 				}
 			ReDraw();
@@ -355,12 +364,12 @@ void MainWindow::OnNotify(Window *child, uint32_t type, const Point &position)
 	}
 	else if (type == EVENT_CHANGE_LINE_WIDTH)
 	{
-		if (lineWidth < 15) {
-    	lineWidth += 1;
+		if (width < 15) {
+    	width += 1;
 		} else {
-   	 	lineWidth = 1;
+   	 	width = 1;
 		}
-		SetLineWidth(lineWidth);
+		SetLineWidth(width);
 		ReDraw();
 	}
 }	
